@@ -309,9 +309,25 @@
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
+
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    // if every item in the collection is true for the opposite of the iterator
+    if (iterator === undefined) {
+      var iterator = _.identity;
+    }
+    if (_.every(collection, function (item) {
+      return !(iterator(item));
+    })) {
+      // then return false
+      return false;
+    } else {
+      // else return true
+      return true;
+    }
+    // we would check the above by using every on the collection
+    // the iterator would be the opposite of the current iterator
   };
 
 
@@ -334,11 +350,41 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    // access the arguments array
+    // create transformed object variable
+    var result = arguments[0];
+    // iterate over the arguments array
+    _.each(arguments, function( currObj, index ) {
+    // if the index of the current object is not 0
+      if (index !== 0) {
+        // iterate over the object
+        _.each(currObj, function( value, key ) {
+        // add current object keys to transformed object
+          result[key] = value;
+        });
+      }
+    });
+    // return the transformed object
+    return result;
   };
+
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    // go over each of the arguments after initial object
+    for (var i = 1; i < arguments.length; i++) {
+    // for each of the properties on the current object
+      _.each(arguments[i], function(value, key) {
+        // check if property exists on object
+        if (obj[key] === undefined) {
+        // set the objects property as the current value of the property
+          obj[key] = value;
+        }
+      });
+    }
+    // return the object
+    return obj;
   };
 
 
