@@ -256,8 +256,56 @@
 
 
   // Determine whether all of the elements match a truth test.
+  // i - the collection, truth test function
+  // o - boolean value true or false
+  // c - use reduce
+  // e - when the collection is empty, when we don't have a truth test which means iterator is undefined
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    // if the collection length is 0
+    if (collection.length === 0) {
+      // then return true
+      return true;
+    }
+    // if the iterator is undefined
+    if (iterator === undefined) {
+      // return reduce on the collection
+      return _.reduce(collection, function(wasTrue, currItem) {
+        if (wasTrue) {
+          // if it is true,
+          // and the accumulator is true,
+          if (currItem) {
+            // then return true
+            return true;
+          // else if the accumulator is not true
+          } else if (!currItem) {
+            // then return false
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }, true);
+    } else {
+      // else return reduce on the collection
+      return _.reduce(collection, function(wasTrue, currItem) {
+      // if the current item is true,
+        if (wasTrue) {
+        // and if the iterator applied to the accumulator is true
+          if (iterator(currItem)) {
+          // then return true
+            return true;
+          // else return false
+          } else {
+            return false;
+          }
+        // else if it is not true
+        } else if (!wasTrue) {
+          // return false
+          return false;
+        }
+      }, true);
+    }
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
